@@ -10,7 +10,7 @@ var upload = multer({ dest: "uploads/" });
 // var validate = require("valid-url");
 var app = express();
 // var port = 3000;
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 5000;
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
