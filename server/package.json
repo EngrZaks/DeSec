@@ -1,7 +1,7 @@
 {
-   "name": "zaks-node-projects",
-   "version": "0.0.1",
-   "description": "An FCC Backend Challenge webApp by DevZaks",
+   "name": "DeSec Server",
+   "version": "1.0",
+   "description": "AricaHacks DeSec Engineers Project Backend",
    "engines": {
       "node": "12.x"
    },
@@ -26,14 +26,13 @@
    },
    "repository": {
       "type": "git",
-      "url": "https://github.com/EngrZaks/fcc-node-microservice-projects"
+      "url": "https://github.com/EngrZaks/DeSec"
    },
    "keywords": [
+      "AfricaHacks",
       "node",
-      "heroku",
-      "hyperdev",
       "express",
-      "freecodecamp",
+      "heroku",
       "DevZaks"
    ],
    "license": "MIT"
