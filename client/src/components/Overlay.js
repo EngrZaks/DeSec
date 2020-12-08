@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
-import { TimelineMax, Power3 } from "gsap";
+import gsap from "gsap";
+import { Power3 } from "gsap";
 import styled from "styled-components";
 
 const OverlayWrapper = styled.div`
@@ -26,7 +27,7 @@ function Overlay() {
   let screen = useRef(null);
 
   useEffect(() => {
-    var tl = new TimelineMax();
+    var tl = new gsap.timeline();
     tl.to(screen.firstElementChild.firstElementChild, {
       duration: 0.6,
       height: 0,
