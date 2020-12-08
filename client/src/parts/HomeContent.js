@@ -3,14 +3,17 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const HomeContentWrapper = styled.div`
-  padding: 3rem;
-  max-width: 350px;
+  padding: 1.5rem;
+  width: 350px;
   margin: auto;
   height: fit-content;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
+  @media only screen and (max-width: 580px) {
+    width: 85%;
+  }
 
   h1 {
     letter-spacing: 0.1rem;
