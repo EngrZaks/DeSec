@@ -1,0 +1,62 @@
+/* defining rootstyles for entire application */
+@import url("https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap");
+
+:root {
+  --main-color: #b815bb;
+  --white: #ffffff;
+  --p-font: 1.2rem;
+  --padding: 7rem;
+  --main-font: "Titillium Web", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--main-font);
+  background: var(--bg-grad);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@media only screen and (min-width: 1550px) {
+  :root {
+    --padding: 14vw;
+  }
+  html {
+    font-size: 110%;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  :root {
+    --padding: 5rem;
+  }
+  html {
+    font-size: 90%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  :root {
+    --padding: 8rem;
+  }
+  html {
+    font-size: 80%;
+  }
+}
+
+@media only screen and (max-width: 580px) {
+  :root {
+    --padding: 3rem;
+  }
+  html {
+    font-size: 79%;
+  }
+}
