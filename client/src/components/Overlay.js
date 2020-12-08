@@ -14,6 +14,7 @@ const OverlayWrapper = styled.div`
   left: 0;
   top: 0;
   z-index: 3;
+  overflow-x: hidden;
   div {
     overflow: hidden;
     h1 {
@@ -39,7 +40,7 @@ function Overlay() {
       screen,
       {
         duration: 1.2,
-        left: "100%",
+        x: "100%",
         ease: Power3.easeInOut,
         delay: 2,
       },
