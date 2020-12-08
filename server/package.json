@@ -1,6 +1,6 @@
 {
-   "name": "deSecServer",
-   "version": "1.0",
+   "name": "desec-server",
+   "version": "1.0.0",
    "description": "AricaHacks DeSec Engineers Project Backend",
    "engines": {
       "node": "12.x"
