@@ -33,12 +33,40 @@ mongoose.connect(process.env.MONGO_URI, {
    useUnifiedTopology: true,
 });
 const userSchema = new mongoose.Schema({
+   role: String,
    email: String,
    name: String,
    password: String,
-   relatives: [],
-   frieds: [],
+   age: Number,
+   gender: String,
+   String,
+   phone: String,
+   dateOfBith: String,
+   dateJoined: String,
+   profileImage: String,
+   Photos: [],
+   location: {},
+   relatives: [{ name: String, relationship: String, location: {} }],
+   frieds: [{ name: String, location: {} }],
 });
+const user = mongoose.model("user", userSchema);
+// const newUser = new user({
+//    role: "citizen",
+//    email: "zabdullahi15@yahoo.com",
+//    name: "Zaks",
+//    age: 23,
+//    gender: "male",
+//    dateJoined: new Date(),
+// });
+// newUser.save((err, data) => {
+//    if (err) {
+//       console.log(err);
+//       // res.send("CONNECTION ERROR");
+//    } else {
+//       console.log(data);
+//       // res.json(data);
+//    }
+// });
 //test
 app.get("/", function (req, res) {
    res.send("helo world from DeSec Engineers");
@@ -55,11 +83,16 @@ app.get("/distress", function (req, res) {
 app.get("/anon_msg", function (req, res) {
    //need location
    const ipaddress = req.connection.remoteAddress;
-   res.json({ address: ipaddress, status: "destress sent" });
-   console.log("destress call sent");
+   res.json({ address: ipaddress, status: "message sent sent" });
+   console.log("sending anonymous message");
 });
-app.get("/login", function (req, res) {
-   res.send("login");
+app.post("/signup", function (req, res) {
+   res.send("signup");
+   console.log("destress call sent");
+   console.log(req.body);
+});
+app.post("/login", function (req, res) {
+   res.send("login succefull, you'll be redirected to home page");
    console.log("destress call sent");
 });
 //listener
