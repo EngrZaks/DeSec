@@ -14,6 +14,7 @@ import Login from "./pages/Login";
 import distress from "./pages/Distress";
 import Message from "./pages/Message";
 import ErrorPage from "./pages/ErrorPage";
+import Signup from "./pages/SignUp";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
           <Route path="/message" component={Message} />
           <Route path="/distress" component={distress} />
           <Route path="*" component={ErrorPage} />
