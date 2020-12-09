@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Button from "../components/Button";
 
 const HomeContentWrapper = styled.div`
   padding: 1.5rem;
@@ -23,25 +24,6 @@ const HomeContentWrapper = styled.div`
     margin-bottom: 3rem;
     font-family: var(--main-font);
   }
-  button {
-    display: block;
-    width: 100%;
-    padding: 0.9rem 1.4rem;
-    background: var(--main-color);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.6s;
-    color: var(--white);
-    font-family: var(--main-font);
-
-    &:hover,
-    &:focus {
-      transform: translateY(-4px);
-      transition: all 0.6s;
-      outline: none;
-    }
-  }
   a {
     text-decoration: none;
     margin-top: 2rem;
@@ -55,13 +37,16 @@ function HomeContent() {
     <HomeContentWrapper>
       <h1>Do you need Help?</h1>
       <Link to="/distress">
-        <button>Distress Signal</button>
+        <Button>Distress Signal</Button>
       </Link>
       <Link to="/message">
-        <button>SOS Message</button>
+        <Button>SOS Message</Button>
       </Link>
       <Link to="/login">
-        <button>Login</button>
+        <Button>Login</Button>
+      </Link>
+      <Link to="/signup">
+        <Button>Signup</Button>
       </Link>
     </HomeContentWrapper>
   );
