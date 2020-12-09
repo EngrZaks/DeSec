@@ -3,6 +3,7 @@ var express = require("express");
 var mongo = require("mongodb");
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
+var md5 = require("md5");
 var myUrl = require("url");
 var dns = require("dns");
 var multer = require("multer");
@@ -39,15 +40,21 @@ const userSchema = new mongoose.Schema({
    password: String,
    age: Number,
    gender: String,
-   String,
    phone: String,
    dateOfBith: String,
    dateJoined: String,
    profileImage: String,
    Photos: [],
    location: {},
-   relatives: [{ name: String, relationship: String, location: {} }],
-   frieds: [{ name: String, location: {} }],
+   relatives: [
+      {
+         name: String,
+         relationship: String,
+         location: {},
+         profileImage: String,
+      },
+   ],
+   frieds: [{ name: String, location: {}, profileImage: String }],
 });
 const user = mongoose.model("user", userSchema);
 // const newUser = new user({
@@ -87,6 +94,37 @@ app.get("/anon_msg", function (req, res) {
    console.log("sending anonymous message");
 });
 app.post("/signup", function (req, res) {
+   const { email, username, password1, password2 } = req.body;
+   if (password1 !== password2) {
+      res.send("password fields should match");
+      console.log("password fields should match");
+   } else {
+      user.findOne({ email: email }, (err, data) => {
+         if (err) {
+            console.log("database CONNECTION ERROR");
+            res.send("CONNECTION ERROR");
+         } else {
+            if (data) {
+               console.log("email already exists");
+               res.send("email already exists, try logging in");
+            } else {
+               const newUser = new user({
+                  email: email,
+                  password: md5(password1),
+                  name: username,
+               });
+               newUser.save((err, data) => {
+                  if (err) {
+                     console.log("database connection error");
+                     res.send("connection erro, please try again");
+                  } else {
+                     res.json(data);
+                  }
+               });
+            }
+         }
+      });
+   }
    res.send("signup");
    console.log("destress call sent");
    console.log(req.body);
