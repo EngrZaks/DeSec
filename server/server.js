@@ -17,6 +17,7 @@ var port = process.env.PORT || 5000;
 // so that your API is remotely testable by FCC
 var cors = require("cors");
 const { url } = require("inspector");
+const e = require("express");
 // app.use(cors({ optionsSuccessStatus: 200 })); // some legacy browsers choke on 204
 app.use(cors());
 // http://expressjs.com/en/starter/static-files.html
@@ -57,24 +58,7 @@ const userSchema = new mongoose.Schema({
    frieds: [{ name: String, location: {}, profileImage: String }],
 });
 const user = mongoose.model("user", userSchema);
-// const newUser = new user({
-//    role: "citizen",
-//    email: "zabdullahi15@yahoo.com",
-//    name: "Zaks",
-//    age: 23,
-//    gender: "male",
-//    dateJoined: new Date(),
-// });
-// newUser.save((err, data) => {
-//    if (err) {
-//       console.log(err);
-//       // res.send("CONNECTION ERROR");
-//    } else {
-//       console.log(data);
-//       // res.json(data);
-//    }
-// });
-//test
+//home route
 app.get("/", function (req, res) {
    res.send("helo world from DeSec Engineers");
 });
@@ -93,20 +77,35 @@ app.get("/anon_msg", function (req, res) {
    res.json({ address: ipaddress, status: "message sent sent" });
    console.log("sending anonymous message");
 });
+
+//SIGNUP
 app.post("/signup", function (req, res) {
    const { email, username, password1, password2 } = req.body;
+   if (!email || !username || !password1 || !password2) {
+      res.send("please provide the right info");
+      console.log("invalid fields");
+      return;
+   }
+   if (password1.length <= 5) {
+      res.send("password length must be greater than five");
+      console.log("short password");
+      return;
+   }
    if (password1 !== password2) {
       res.send("password fields should match");
       console.log("password fields should match");
+      return;
    } else {
       user.findOne({ email: email }, (err, data) => {
          if (err) {
             console.log("database CONNECTION ERROR");
             res.send("CONNECTION ERROR");
+            return;
          } else {
             if (data) {
                console.log("email already exists");
                res.send("email already exists, try logging in");
+               return;
             } else {
                const newUser = new user({
                   email: email,
@@ -118,20 +117,37 @@ app.post("/signup", function (req, res) {
                      console.log("database connection error");
                      res.send("connection erro, please try again");
                   } else {
-                     res.json(data);
+                     res.json({ signup_status: "succesful", ...data });
                   }
                });
             }
          }
       });
    }
-   res.send("signup");
-   console.log("destress call sent");
-   console.log(req.body);
 });
+
+//LOGIN
 app.post("/login", function (req, res) {
-   res.send("login succefull, you'll be redirected to home page");
-   console.log("destress call sent");
+   const { email, password } = req.body;
+   if (!email || !password || email.length == 0 || password.length == 0) {
+      res.send("please provide your sign in details");
+      console.log("no data");
+   } else {
+      user.findOne({ email: email }, (err, data) => {
+         if (err) {
+            console.log(err);
+            res.send("connection error");
+         } else if (data) {
+            if (data.password !== md5(password)) {
+               res.send("user password does not match");
+               console.log("user password does not match");
+               return;
+            } else if (data.password === md5(password)) {
+               res.json({ login_status: "succesful", ...data });
+            }
+         }
+      });
+   }
 });
 //listener
 var listener = app.listen(port, function () {
