@@ -10,11 +10,7 @@ var multer = require("multer");
 var upload = multer({ dest: "uploads/" });
 // var validate = require("valid-url");
 var app = express();
-// var port = 3000;
 var port = process.env.PORT || 5000;
-
-// enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
-// so that your API is remotely testable by FCC
 var cors = require("cors");
 const { url } = require("inspector");
 const e = require("express");
@@ -27,7 +23,6 @@ app.use(cors());
 //using body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-// http://expressjs.com/en/starter/basic-routing.html
 
 // databse connection
 mongoose.connect(process.env.MONGO_URI, {
@@ -59,7 +54,8 @@ const userSchema = new mongoose.Schema({
 });
 const user = mongoose.model("user", userSchema);
 //home route
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
+   const ipaddress = req.connection.remoteAddress;
    res.send("helo world from DeSec Engineers");
 });
 
@@ -82,30 +78,36 @@ app.get("/anon_msg", function (req, res) {
 app.post("/signup", function (req, res) {
    const { email, username, password1, password2 } = req.body;
    if (!email || !username || !password1 || !password2) {
-      res.send("please provide the right info");
-      console.log("invalid fields");
-      return;
+      return res.status(400).json({
+         status: "error",
+         message: "Missing required email and password fields",
+      });
    }
    if (password1.length <= 5) {
-      res.send("password length must be greater than five");
-      console.log("short password");
-      return;
+      return res.status(400).json({
+         status: "error",
+         message: "password fields should be greater than 5",
+      });
    }
    if (password1 !== password2) {
-      res.send("password fields should match");
-      console.log("password fields should match");
-      return;
+      return res.status(400).json({
+         status: "error",
+         message: "the two password fields should match",
+      });
    } else {
       user.findOne({ email: email }, (err, data) => {
          if (err) {
-            console.log("database CONNECTION ERROR");
-            res.send("CONNECTION ERROR");
-            return;
+            return res.status(500).json({
+               status: "error",
+               message: "An error occurred trying to process your request",
+            });
          } else {
             if (data) {
-               console.log("email already exists");
-               res.send("email already exists, try logging in");
-               return;
+               return res.status(404).json({
+                  status: "error",
+                  message:
+                     "User with the specified email already exists, try logging in",
+               });
             } else {
                const newUser = new user({
                   email: email,
@@ -114,8 +116,11 @@ app.post("/signup", function (req, res) {
                });
                newUser.save((err, data) => {
                   if (err) {
-                     console.log("database connection error");
-                     res.send("connection erro, please try again");
+                     return res.status(500).json({
+                        status: "error",
+                        message:
+                           "An error occurred trying to process your request",
+                     });
                   } else {
                      res.json({ signup_status: "succesful", ...data });
                   }
@@ -130,18 +135,28 @@ app.post("/signup", function (req, res) {
 app.post("/login", function (req, res) {
    const { email, password } = req.body;
    if (!email || !password || email.length == 0 || password.length == 0) {
-      res.send("please provide your sign in details");
-      console.log("no data");
+      return res.status(400).json({
+         status: "error",
+         message: "Missing required email and password fields",
+      });
    } else {
       user.findOne({ email: email }, (err, data) => {
          if (err) {
-            console.log(err);
-            res.send("connection error");
+            return res.status(500).json({
+               status: "error",
+               message: "An error occurred trying to process your request",
+            });
+         } else if (!data) {
+            return res.status(404).json({
+               status: "error",
+               message: "User with the specified email does not exists",
+            });
          } else if (data) {
             if (data.password !== md5(password)) {
-               res.send("user password does not match");
-               console.log("user password does not match");
-               return;
+               return res.status(404).json({
+                  status: "error",
+                  message: "invalid password provided",
+               });
             } else if (data.password === md5(password)) {
                res.json({ login_status: "succesful", ...data });
             }
